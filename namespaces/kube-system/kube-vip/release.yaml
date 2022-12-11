@@ -7,10 +7,9 @@ spec:
   releaseName: kube-vip
   chart:
     spec:
-      chart: kube-vip
-      version: 0.4.2
+      chart: ./charts/kube-vip
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: kube-vip
         namespace: flux-system
   interval: 10m0s
