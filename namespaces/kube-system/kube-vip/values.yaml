@@ -7,7 +7,7 @@ config:
 env:
   vip_arp: "true"
   port: "6443"
-  vip_interface: "lo"
+  vip_interface: "eth0"
   vip_cidr: "32"
   cp_enable: "true"
   cp_namespace: "kube-system"
