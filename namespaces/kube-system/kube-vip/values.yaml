@@ -5,7 +5,7 @@ config:
   address: "192.168.250.100"
 
 env:
-  vip_arp: "false"
+  vip_arp: "true"
   port: "6443"
   vip_interface: "lo"
   vip_cidr: "32"
@@ -13,11 +13,15 @@ env:
   cp_namespace: "kube-system"
   vip_ddns: "false"
   svc_enable: "true"
-  bgp_enable: "true"
+  bgp_enable: "false"
   bgp_routerid: "192.168.0.151"
   bgp_as: "64500"
   bgp_peeras: "65530"
   bgp_peers: 192.168.250.101:64500::false,192.168.250.102:64500::false,192.168.250.103:64500::false
+  vip_leaderelection: "true"
+  vip_leaseduration: "5"
+  vip_renewdeadline: "3"
+  vip_retryperiod: "1"
 
 securityContext:
   capabilities:
