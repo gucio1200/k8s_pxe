@@ -1,8 +1,24 @@
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: kube-vip
   namespace: flux-system
 spec:
-  interval: 30m
-  url: https://kube-vip.io/helm-charts
+  interval: 10m
+  url: https://github.com/kube-vip/helm-charts
+  ref:
+    branch: main
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmChart
+metadata:
+  name: kube-vip
+  namespace: flux-system
+spec:
+  chart: ./charts/kube-vip
+  sourceRef:
+    name: kube-vip
+    kind: GitRepository
+  interval: 10m
