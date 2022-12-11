@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: booty-config
+  namespace: booty
 data:
   # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
   hardware.json: |
@@ -235,6 +236,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: booty
+  namespace: booty
   labels:
     app: booty
 spec:
@@ -278,6 +280,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: booty
   annotations:
     metallb.universe.tf/allow-shared-ip: booty-svc # If you have a metallb setup, you need this to attach two services to the same IP
   labels:
@@ -297,6 +300,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: booty
   annotations:
     metallb.universe.tf/allow-shared-ip: booty-svc # If you have a metallb setup, you need this to attach two services to the same IP
   labels:
