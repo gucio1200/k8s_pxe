@@ -12,7 +12,7 @@ env:
   cp_enable: "true"
   cp_namespace: "kube-system"
   vip_ddns: "false"
-  svc_enable: "true"
+  svc_enable: "false"
   bgp_enable: "false"
   bgp_routerid: "192.168.0.151"
   bgp_as: "64500"
