@@ -1,0 +1,27 @@
+image:
+  tag: "v0.5.7"
+
+config:
+  address: "192.168.250.100"
+
+env:
+  vip_arp: "false"
+  port: "6443"
+  vip_interface: "lo"
+  vip_cidr: "32"
+  cp_enable: "true"
+  cp_namespace: "kube-system"
+  vip_ddns: "false"
+  svc_enable: "true"
+  bgp_enable: "true"
+  bgp_routerid: "192.168.0.151"
+  bgp_as: "64500"
+  bgp_peeras: "65530"
+  bgp_peers: 192.168.250.101:64500::false,192.168.250.102:64500::false,192.168.250.103:64500::false
+
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_TIME
