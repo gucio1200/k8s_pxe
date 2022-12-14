@@ -8,9 +8,9 @@ data:
   # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
   hardware.json: |
     {
-      "00:1E:06:45:11:5E":
+      "00:1E:06:45:11:5F":
         {"hostname": "aren"},
-      "40:a8:f0:b1:8d:e1":
+      "00:1E:06:45:11:5E":
         {"hostname":"yghitan"},
       "d4:c9:ef:dc:10:72":
         {"hostname":"ehrlitan"},
