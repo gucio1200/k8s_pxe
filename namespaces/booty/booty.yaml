@@ -8,9 +8,11 @@ data:
   # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
   boot.ipxe: |
     #!ipxe
-    set base-url http://stable.release.flatcar-linux.net/amd64-usr/current
-    kernel ${base-url}/flatcar_production_pxe.vmlinuz initrd=flatcar_production_pxe_image.cpio.gz flatcar.first_boot=1
-    initrd ${base-url}/flatcar_production_pxe_image.cpio.gz
+    set base-url https://github.com/siderolabs/talos/releases/latest/download
+    set talos_config
+    set boot-params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic ${cmdline}
+    kernel ${base-url}/vmlinuz-x86_64 ${boot_params}
+    initrd ${base-url}/initramfs-x86_64.xz
     boot
 ---
 apiVersion: apps/v1
