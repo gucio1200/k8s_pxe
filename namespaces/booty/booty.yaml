@@ -18,6 +18,7 @@ data:
     echo
     echo Booting with the following kernel args:
     echo ${boot_params}
+    echo ${boot_params_addition}
     boot
 ---
 apiVersion: apps/v1
