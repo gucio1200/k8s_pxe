@@ -10,9 +10,8 @@ data:
     #!ipxe
     set base-url https://github.com/siderolabs/talos/releases/latest/download
     set boot_params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic
-    set boot_params_addition bond=bond0:eth0,eth1:mode=802.3ad,xmit_hash_policy=layer2+3
     imgfree
-    kernel ${base-url}/vmlinuz-amd64 ${boot_params} ${boot_params_addition}
+    kernel ${base-url}/vmlinuz-amd64 ${boot_params}
     initrd ${base-url}/initramfs-amd64.xz
     echo
     echo Booting with the following kernel args:
