@@ -16,9 +16,6 @@ data:
     echo
     echo Booting with the following kernel args:
     echo ${boot_params}
-    echo
-    echo MD5sums:
-    md5sum vmlinuz-amd64 initramfs-amd64.xz
     boot
 ---
 apiVersion: apps/v1
