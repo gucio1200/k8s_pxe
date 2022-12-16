@@ -9,6 +9,7 @@ data:
   boot.ipxe: |
     #!ipxe
     set base-url https://github.com/siderolabs/talos/releases/latest/download
+    set talos_config talos.config=
     set boot_params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic ${cmdline}
     imgfree
     kernel ${base-url}/vmlinuz-amd64 ${boot_params}
