@@ -24,6 +24,8 @@ kind: Deployment
 metadata:
   name: booty
   namespace: booty
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app: booty
 spec:
