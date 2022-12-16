@@ -6,238 +6,12 @@ metadata:
   namespace: booty
 data:
   # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
-  hardware.json: |
-    {
-      "00:1E:06:45:11:5F":
-        {"hostname": "aren"},
-      "00:1E:06:45:11:5E":
-        {"hostname":"yghitan"},
-      "d4:c9:ef:dc:10:72":
-        {"hostname":"ehrlitan"},
-      "d4:be:d9:11:d0:bf":
-        {"hostname":"kartool"},
-      "74:d0:2b:33:4d:5d":
-        {"hostname":"lether"}
-    }
-  ignition.yaml: |
-    passwd:
-      users:
-        - name: core
-          ssh_authorized_keys: 
-            - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCvJdo0KecnU670xNKYYH37/nV3I34Fy0JSbGDcb5lFght5pDftiIt5/BxK7GQ59SKoNzLIEI+0xeIbWOy5zz+YKDwi1s/zJrtrWufGho48NYsRrk0xduCQJXH/ROUGqh8UEKRcsU8IHRDPi3Lon/lqpX1BCJfVVJ1ws/9mHxUe5gw80MqZ5j52bVFn2kAn35823ZhzH/lvZ8my0OE7UdYxynKQcIQZeAZh4+NvSL2FzRA4BNlUy5g+Oa5AQGV0Yp5NcST+SiHmnuZt615be3UWWqkp0cwcB9VdpzVazdaqB35SfEApZcKRkY2RatX1QDP7B8VPid0jlp15TFxqtwEl"
-    storage:
-      filesystems:
-        - name: nvme0n1
-          mount:
-            device: /dev/nvme0n1
-            format: ext4
-            wipe_filesystem: true
-            label: nvme
-      files:
-        - filesystem: root
-          path: /opt/hostname.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/hostname.sh
-          mode: 775
-        - filesystem: root
-          path: /opt/cni.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/cni.sh
-          mode: 775
-        - filesystem: root
-          path: /opt/systemd.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/systemd.sh
-          mode: 775
-        - filesystem: root
-          path: /opt/kube-tools.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/kube-tools.sh
-          mode: 775
-        - filesystem: root
-          path: /opt/join.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/join.sh
-          mode: 775
-        - filesystem: root
-          path: /opt/version-check.sh
-          contents:
-            remote:
-              url: http://{{ .ServerIP }}/data/config/version-check.sh
-          mode: 775
-    systemd:
-      units:
-        - enabled: true
-          name: docker.service
-        - enabled: true
-          name: containerd.service
-        - name: update.service
-          contents: |
-            [Unit]
-            Description=Compares current version to remote version
-
-            [Service]
-            Environment="BOOTY_IP={{ .ServerIP }}"
-            Type=oneshot
-            ExecStart=/opt/version-check.sh
-        - name: update.timer
-          enable: true
-          contents: |
-            [Unit]
-            Description=Run update-check every 10 minutes
-
-            [Timer]
-            OnCalendar=*:0/10
-
-            [Install]
-            WantedBy=multi-user.target
-        - enabled: true
-          name: fetch-hostname.service
-          contents: |
-            [Install]
-            WantedBy=multi-user.target
-
-            [Unit]
-            Description=fetch hostname script
-            Wants=network-online.target
-            After=network.target network-online.target
-
-            [Service]
-            Environment="BOOTY_IP={{ .ServerIP }}"
-            Type=oneshot
-            ExecStart=/opt/hostname.sh
-        - enabled: true
-          name: cni-install.service
-          contents: |
-            [Install]
-            WantedBy=multi-user.target
-
-            [Unit]
-            Description=k8s installation script
-            Wants=network-online.target
-            After=network.target network-online.target
-
-            [Service]
-            Type=oneshot
-            ExecStart=/opt/cni.sh
-        - enabled: true
-          name: kube-tools-install.service
-          contents: |
-            [Install]
-            WantedBy=multi-user.target
-
-            [Unit]
-            Description=k8s installation script
-            Requires=cni-install.service
-            After=cni-install.service
-
-            [Service]
-            Type=oneshot
-            ExecStart=/opt/kube-tools.sh
-        - enabled: true
-          name: systemd-k8s-setup.service
-          contents: |
-            [Install]
-            WantedBy=multi-user.target
-
-            [Unit]
-            Description=k8s installation script
-            Requires=kube-tools-install.service
-            After=kube-tools-install.service
-
-            [Service]
-            Type=oneshot
-            ExecStart=/opt/systemd.sh
-        - enabled: true
-          name: k8s-join.service
-          contents: |
-            [Install]
-            WantedBy=multi-user.target
-
-            [Unit]
-            Description=k8s join script
-            Requires=systemd-k8s-setup.service
-            After=systemd-k8s-setup.service
-
-            [Service]
-            Environment="JOIN_STRING={{ .JoinString }}"
-            Type=oneshot
-            ExecStart=/bin/bash -c 'PATH=/opt/bin:$PATH exec /opt/join.sh'
   boot.ipxe: |
     #!ipxe
     set base-url http://pxe/data
     kernel ${base-url}/flatcar_production_pxe.vmlinuz initrd=flatcar_production_pxe_image.cpio.gz flatcar.first_boot=1 ignition.config.url=http://pxe/ignition.json
     initrd ${base-url}/flatcar_production_pxe_image.cpio.gz
     boot
-  cni.sh: |
-    #!/bin/bash
-    CNI_VERSION="v1.1.1"
-    mkdir -p /opt/cni/bin
-    curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-amd64-${CNI_VERSION}.tgz" | tar -C /opt/cni/bin -xz
-    echo "CNI driver installed";
-  hostname.sh: |
-    #!/bin/bash
-    MAC=$(ifconfig $(ip addr | awk '/state UP/ {print $2}' | sed 's/.$//') | awk '/ether/ {print $2}')
-    HOSTNAME=$(curl --fail http://${BOOTY_IP}/hosts?mac="$MAC" | jq -r '.hostname')
-
-    RET=$?
-    if [ $RET -ne 0 ]; then
-            echo "Failed to get hostname from server"
-            HOSTNAME=flatcar
-    fi
-
-    echo "$HOSTNAME" > /etc/hostname
-    sudo hostnamectl set-hostname "$HOSTNAME"
-  join.sh: |
-    #!/bin/bash
-    sysctl net.bridge.bridge-nf-call-iptables=1
-    /opt/bin/${JOIN_STRING}
-
-  kube-tools.sh: |
-    #!/bin/bash
-    RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-    mkdir -p /opt/bin
-    cd /opt/bin
-    curl -L --remote-name-all https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/amd64/{kubeadm,kubelet,kubectl}
-    chmod +x {kubeadm,kubelet,kubectl}
-    VERSION="v1.22.0"
-    wget https://github.com/kubernetes-incubator/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-    sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /opt/bin
-    rm -f crictl-$VERSION-linux-amd64.tar.gz
-    echo "Kube Tools installed.";
-  systemd.sh: |
-    #!/bin/bash
-    curl -sSL "https://raw.githubusercontent.com/kubernetes/release/master/cmd/kubepkg/templates/latest/deb/kubelet/lib/systemd/system/kubelet.service" | sed "s:/usr/bin:/opt/bin:g" > /etc/systemd/system/kubelet.service
-    mkdir -p /etc/systemd/system/kubelet.service.d
-    curl -sSL "https://raw.githubusercontent.com/kubernetes/release/master/cmd/kubepkg/templates/latest/deb/kubeadm/10-kubeadm.conf" | sed "s:/usr/bin:/opt/bin:g" > /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-
-    echo "KUBELET_EXTRA_ARGS=--cgroup-driver=systemd" > /etc/default/kubelet
-
-    systemctl enable kubelet && systemctl start kubelet
-    echo "Kubelet started";
-  version-check.sh: |
-    #!/bin/bash
-
-    set -a
-    . /etc/lsb-release
-    . <(curl http://${BOOTY_IP}/version.txt)
-    set +a
-
-    echo "Local version: $DISTRIB_RELEASE";
-    echo "Remote version: $FLATCAR_VERSION";
-
-    if [ "$DISTRIB_RELEASE" != "$FLATCAR_VERSION" ]; then
-      echo "Need to reboot!";
-      touch /var/run/reboot-required
-    else
-      echo "Up to date";
-    fi
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -261,20 +35,14 @@ spec:
       containers:
       - name: booty
         imagePullPolicy: Always
-        image: gucio1200/booty:latest
+        image: gucio1200/algernon:latest
         args:
-          - "--dataDir"
-          - "/data"
-          - "--joinString"
-          - "kubeadm join 192.168.1.10:6443 --token LOLNOPE --discovery-token-ca-cert-hash sha256:LOLNOPE"
-          - "--serverIP"
-          - "172.16.99.2" # This should be the IP of the service your hosts can connect to
+          - "algernon --httponly --autorefresh"
         ports:
-        - containerPort: 69
-        - containerPort: 8080
+        - containerPort: 3000
         volumeMounts:
         - name: booty-config
-          mountPath: /data/config/
+          mountPath: /srv/algernon
         resources:
           limits:
             cpu: "500m" # This could probably be tuned lower
@@ -299,26 +67,6 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 8080
-  selector:
-    app: booty
-  type: LoadBalancer
-  loadBalancerIP: 172.16.99.2
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: booty
-  annotations:
-    metallb.universe.tf/allow-shared-ip: booty-svc # If you have a metallb setup, you need this to attach two services to the same IP
-  labels:
-    app: booty
-  name: booty-udp
-spec:
-  ports:
-  - name: tftp
-    port: 69
-    protocol: UDP
-    targetPort: 69
   selector:
     app: booty
   type: LoadBalancer
