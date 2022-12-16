@@ -23,7 +23,8 @@ data:
     passwd:
       users:
         - name: core
-          ssh_authorized_keys: [] # You should put your SSH keys here ;)
+          ssh_authorized_keys: 
+            - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCvJdo0KecnU670xNKYYH37/nV3I34Fy0JSbGDcb5lFght5pDftiIt5/BxK7GQ59SKoNzLIEI+0xeIbWOy5zz+YKDwi1s/zJrtrWufGho48NYsRrk0xduCQJXH/ROUGqh8UEKRcsU8IHRDPi3Lon/lqpX1BCJfVVJ1ws/9mHxUe5gw80MqZ5j52bVFn2kAn35823ZhzH/lvZ8my0OE7UdYxynKQcIQZeAZh4+NvSL2FzRA4BNlUy5g+Oa5AQGV0Yp5NcST+SiHmnuZt615be3UWWqkp0cwcB9VdpzVazdaqB35SfEApZcKRkY2RatX1QDP7B8VPid0jlp15TFxqtwEl"
     storage:
       filesystems:
         - name: nvme0n1
