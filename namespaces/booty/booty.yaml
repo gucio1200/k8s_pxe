@@ -11,8 +11,8 @@ data:
     set base-url https://github.com/siderolabs/talos/releases/latest/download
     set talos_config talos.config=
     set boot-params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic ${cmdline}
-    kernel ${base-url}/vmlinuz-x86_64 ${boot_params}
-    initrd ${base-url}/initramfs-x86_64.xz
+    kernel ${base-url}/vmlinuz-amd64 ${boot_params}
+    initrd ${base-url}/initramfs-amd64.xz
 ---
 apiVersion: apps/v1
 kind: Deployment
