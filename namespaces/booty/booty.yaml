@@ -13,6 +13,7 @@ data:
     set boot-params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic ${cmdline}
     kernel ${base-url}/vmlinuz-amd64 ${boot_params}
     initrd ${base-url}/initramfs-amd64.xz
+    boot
 ---
 apiVersion: apps/v1
 kind: Deployment
