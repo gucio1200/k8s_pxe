@@ -11,8 +11,15 @@ data:
     set base-url https://github.com/siderolabs/talos/releases/latest/download
     set talos_config talos.config=
     set boot-params page_poison=1 printk.devkmsg=on slab_nomerge slub_debug=P pti=on talos.platform=metal ${talos_config} initrd=initrd.magic ${cmdline}
+    imgfree
     kernel ${base-url}/vmlinuz-amd64 ${boot_params}
     initrd ${base-url}/initramfs-amd64.xz
+    echo
+    echo Booting with the following kernel args:
+    echo ${boot_params}
+    echo
+    echo MD5sums:
+    md5sum vmlinuz-amd64 initramfs-amd64.xz
     boot
 ---
 apiVersion: apps/v1
