@@ -36,8 +36,6 @@ spec:
       - name: booty
         imagePullPolicy: Always
         image: gucio1200/algernon:latest
-        args:
-          - "algernon --httponly --autorefresh"
         ports:
         - containerPort: 3000
         volumeMounts:
