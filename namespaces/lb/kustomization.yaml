@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: lb
 resources:
   - namespace.yaml
-  - release.yaml
+#  - release.yaml
 configMapGenerator:
   - name: haproxy-values
     files:
