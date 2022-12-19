@@ -33,7 +33,7 @@ spec:
       containers:
       - name: lb
         imagePullPolicy: Always
-        image: yyyar/gobetween
+        image: gucio1200/gobetween
         ports:
         - containerPort: 6443
         volumeMounts:
