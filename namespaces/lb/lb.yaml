@@ -12,13 +12,13 @@ data:
     protocol = "tcp"
     bind = "0.0.0.0:6443"
 
-      [servers.default.discovery]
-      kind = "static"
-      static_list = [
-          "192.168.2.11:6443",
-          "192.168.2.12:6443",
-          "192.168.2.13:6443"
-      ]
+    [servers.default.discovery]
+    kind = "static"
+    static_list = [
+      "192.168.2.11:6443 priority=1",
+      "192.168.2.12:6443 priority=1",
+      "192.168.2.13:6443 priority=1"
+    ]
 ---
 apiVersion: apps/v1
 kind: Deployment
