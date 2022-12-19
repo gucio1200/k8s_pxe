@@ -11,7 +11,16 @@ data:
     [servers.default]
     protocol = "tcp"
     bind = "0.0.0.0:6443"
-
+    balance = "leastconn"
+    
+    [servers.default.healthcheck]
+    interval = "3s"
+    timeout = "2s"
+    fails = 5
+    passes = 2
+    initial_status = "healthy"
+    kind = "ping"
+    
     [servers.default.discovery]
     kind = "static"
     static_list = [
