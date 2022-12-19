@@ -5,7 +5,6 @@ metadata:
   name: booty-config
   namespace: booty
 data:
-  # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
   boot.ipxe: |
     #!ipxe
     set base-url https://github.com/siderolabs/talos/releases/latest/download
