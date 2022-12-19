@@ -8,7 +8,7 @@ data:
   # Update Hardware with your MAC/Hostname mapping. Here's mine for an example
   gobetween.toml: |
     [logging]
-    level = "debug"
+    level = "info"
     
     [servers]
     [servers.default]
