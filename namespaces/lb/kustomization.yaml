@@ -2,4 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-  - lb.yaml
+  - lb-k8s.yaml
+  - lb-s3.yaml
