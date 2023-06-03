@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - lb-k8s.yaml
-  - lb-s3.yaml
+#  - lb-s3.yaml
