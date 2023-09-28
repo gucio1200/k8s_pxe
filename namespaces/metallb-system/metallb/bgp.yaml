@@ -1,0 +1,22 @@
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: k3s-node1
+  namespace: metallb-system
+spec:
+  holdTime: 1m30s
+  keepaliveTime: 0s
+  myASN: 64500
+  peerASN: 65530
+  peerAddress: 192.168.0.151
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: bgp
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.16.99.2-172.16.99.100
