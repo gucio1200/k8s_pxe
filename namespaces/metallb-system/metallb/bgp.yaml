@@ -18,3 +18,13 @@ metadata:
 spec:
   addresses:
   - 172.16.99.2-172.16.99.100
+
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: bgp
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - bgp
