@@ -1,0 +1,26 @@
+controller:
+  nodeSelector:
+    node.kubernetes.io/controller: "true"
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/controller
+      operator: Exists
+speaker:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/controller
+      operator: Exists
+configInline:
+  peers:
+  - peer-address: 192.168.0.151
+    peer-asn: 65530
+    my-asn: 64500
+  address-pools:
+  - name: default
+    protocol: bgp
+    addresses:
+      - 172.16.99.2-172.16.99.100
