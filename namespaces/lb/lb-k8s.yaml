@@ -29,7 +29,8 @@ data:
     static_list = [
       "192.168.2.11:6443 priority=1",
       "192.168.2.12:6443 priority=1",
-      "192.168.2.13:6443 priority=1"
+      "192.168.2.13:6443 priority=1",
+      "192.168.2.14:6443 priority=1"
     ]
 ---
 apiVersion: apps/v1
